@@ -1,0 +1,128 @@
+CREATE TABLE Admin (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(255),
+    surname VARCHAR(255),
+    email VARCHAR(255),
+    phone VARCHAR(255),
+    hashed_password VARCHAR(255),
+    status INT,
+    created_date DATETIME,
+    updated_date DATETIME,
+    updated_by INT
+);
+
+CREATE TABLE city (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(255)
+);
+
+CREATE TABLE district (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    city_id INT,
+    name VARCHAR(255),
+    FOREIGN KEY (city_id) REFERENCES city(id)
+);
+
+CREATE TABLE neighborhood (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    district_id INT,
+    name VARCHAR(255),
+    FOREIGN KEY (district_id) REFERENCES district(id)
+);
+
+CREATE TABLE blood_type (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(255)
+);
+
+CREATE TABLE donation_type (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(255)
+);
+
+CREATE TABLE User (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(255),
+    surname VARCHAR(255),
+    email VARCHAR(255),
+    phone VARCHAR(255),
+    location INT,
+    blood_type_id INT,
+    gender ENUM('Male', 'Female', 'Other'),
+    birth_date DATE,
+    weight INT,
+    is_donor ENUM('Yes', 'No'),
+    can_donate ENUM('Yes', 'No'),
+    agreed_terms ENUM('Yes', 'No'),
+    hashed_password VARCHAR(255),
+    status INT,
+    created_date DATETIME,
+    updated_date DATETIME,
+    updated_by INT,
+    FOREIGN KEY (location) REFERENCES neighborhood(id),
+    FOREIGN KEY (blood_type) REFERENCES blood_type(id),
+    FOREIGN KEY (updated_by) REFERENCES Admin(id)
+);
+
+CREATE TABLE Health_Forms (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    user_id INT,
+    answer ENUM('Yes', 'No'),
+    status INT,
+    created_date DATETIME,
+    updated_date DATETIME,
+    updated_by INT,
+    FOREIGN KEY (user_id) REFERENCES User(id)
+);
+
+CREATE TABLE Audit_logs (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    user_id INT,
+    admins_id INT,
+    login_status ENUM('Success', 'Failure'),
+    created_date DATETIME,
+    FOREIGN KEY (user_id) REFERENCES User(id),
+    FOREIGN KEY (admins_id) REFERENCES Admin(id)
+);
+
+CREATE TABLE Blood_Donation_Publication (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    user_id INT,
+    location INT,
+    hospital_name VARCHAR(255),
+    blood_type INT,
+    urgency_status INT, -- 1: Acil, 2: Planlı
+    start_date DATETIME,
+    end_date DATETIME,
+    donation_type INT,
+    description VARCHAR(255),
+    status INT, -- 1: Başarılı, 2: Başarısız, 3: Devam Eden
+    created_date DATETIME,
+    updated_date DATETIME,
+    updated_users INT,
+    updated_admins INT,
+    FOREIGN KEY (user_id) REFERENCES User(id),
+    FOREIGN KEY (location) REFERENCES neighborhood(id),
+    FOREIGN KEY (blood_type) REFERENCES blood_type(id),
+    FOREIGN KEY (donation_type) REFERENCES donation_type(id),
+    FOREIGN KEY (updated_users) REFERENCES User(id),
+    FOREIGN KEY (updated_admins) REFERENCES Admin(id)
+);
+
+CREATE TABLE Blood_don_chosen (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    Blood_Donation_Publication_id INT,
+    Users_id INT,
+    FOREIGN KEY (Blood_Donation_Publication_id) REFERENCES Blood_Donation_Publication(id),
+    FOREIGN KEY (Users_id) REFERENCES User(id)
+);
+
+CREATE TABLE Blood_don_applicant (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    Blood_don_chosen INT,
+    Users_id INT,
+    approval_status INT, -- Bağışa seçilip geldi ise
+    approval_status_2 INT, -- İlanı açan onay verdiyse 1
+    FOREIGN KEY (Blood_don_chosen) REFERENCES Blood_don_chosen(id),
+    FOREIGN KEY (Users_id) REFERENCES User(id)
+);
