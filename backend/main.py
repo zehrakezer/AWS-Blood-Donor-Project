@@ -29,7 +29,7 @@ async def sendEmail(email):
     try:
         async with httpx.AsyncClient() as client:
             response = await client.get(
-                "https://1gfauwl3l6.execute-api.eu-central-1.amazonaws.com/default/savemailadress",
+                "https://11.execute-api.eu-central-1.amazonaws.com/default/savemailadress",
                 params={"email": email}
             )
             response.raise_for_status()
@@ -44,7 +44,7 @@ async def sendEmail2(id):
     try:
         async with httpx.AsyncClient() as client:
             response = await client.get(
-                "https://sizznta2vc.execute-api.eu-central-1.amazonaws.com/default/newuserpublication",
+                "https://ss.execute-api.eu-central-1.amazonaws.com/default/newuserpublication",
                 params={"user_id": id}
             )
             response.raise_for_status()
