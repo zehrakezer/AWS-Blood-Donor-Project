@@ -6,7 +6,7 @@ from sqlalchemy import create_engine
 
 # Update the DATABASE_URL for MySQL on AWS RDS
 # Replace <username>, <password>, <hostname>, <dbname> with your actual MySQL credentials and database details
-DATABASE_URL = "mysql+pymysql://admin:password@blooddb.cl.eu-central-1.rds.amazonaws.com:3306/blooodsdb"
+DATABASE_URL = "mysql+pymysql://admin:password@hsotname.cl.region.rds.amazonaws.com:3306/dbname"
 
 # Create engine for connecting to MySQL
 engine = create_engine(DATABASE_URL, pool_size=20, max_overflow=10, pool_timeout=30, pool_recycle=3600)
